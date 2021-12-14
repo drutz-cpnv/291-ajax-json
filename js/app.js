@@ -18,7 +18,7 @@ class SearchInput {
             }
         })
 
-        this.input.addEventListener("keydown",  async (e) => {
+        this.input.addEventListener("keydown",  async () => {
             if(this.input.value.length > 1) {
                 await this.updateList(this.input.value)
                 this.dropdown.classList.add("show")
@@ -134,8 +134,11 @@ class FindRelation {
           </div>`)
 
             document.querySelector("#accordion").append(noResult)
+            this.resultCount.textContent = "0"
             return
         }
+
+        this.resultCount.textContent = json.connections.length.toString()
 
         document.querySelector("#accordion").innerHTML = ""
         json.connections.forEach(v => {
@@ -169,10 +172,18 @@ class FindRelation {
         })
 
         o.querySelector("button").addEventListener("click", (e) => {
+            if(e.target.parentNode.nextSibling.nextSibling.classList.contains("show")){
+                e.target.parentNode.nextSibling.nextSibling.classList.remove("show")
+            }
+            else{
+                e.target.parentNode.nextSibling.nextSibling.classList.add("show")
+            }
             Array.from(document.querySelectorAll(".accordion-collapse")).forEach(el => {
-                el.classList.remove("show")
+                if(el !== e.target.parentNode.nextSibling.nextSibling) {
+                    el.classList.remove("show")
+                }
             })
-            o.querySelector(".accordion-collapse").classList.toggle("show")
+
         })
 
         document.querySelector("#accordion").append(o)
