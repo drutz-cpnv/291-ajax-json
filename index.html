@@ -52,7 +52,7 @@
         <ul class="list-group mb-3">
           <li class="list-group-item lh-sm">
             <div>
-              <h6 class="my-0 mb-2">Départ</h6>
+              <h6 class="my-0 mb-2 d-flex justify-content-between">Départ</h6>
               <input type="text" class="form-control" id="from">
               <ul class="dropdown-menu" id="from-suggest">
               </ul>
@@ -60,8 +60,8 @@
           </li>
           <li class="list-group-item lh-sm">
             <div>
-              <h6 class="my-0 mb-2">Arrivée</h6>
               <div class="dropdown">
+                <h6 class="my-0 mb-2 d-flex justify-content-between">Arrivée</h6>
                 <input type="text" class="form-control" id="to">
                 <ul class="dropdown-menu" id="to-suggest">
                 </ul>
@@ -69,15 +69,16 @@
             </div>
           </li>
           <li class="list-group-item lh-sm">
-            <div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <button id="search" class="btn btn-secondary">Rechercher</button>
+              <button id="reverse" class="btn btn-primary d-flex align-items-center"><span class="material-icons-round">compare_arrows</span></button>
             </div>
           </li>
         </ul>
       </div>
       <div class="col-md-7 col-lg-8">
         <h4 class="mb-3">Résultats</h4>
-        <div class="accordion" id="accordion">
+        <div class="accordion text-center" id="accordion">
 
 
 

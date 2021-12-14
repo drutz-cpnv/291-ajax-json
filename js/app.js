@@ -11,6 +11,10 @@ class SearchInput {
     constructor(input, dropdown) {
         this.input = input
         this.dropdown = dropdown
+        this.label = this.input.parentNode.firstElementChild
+        this.loadingElement = strToDom(`<div class="spinner-border spinner-border-sm text-primary" role="status">
+  <span class="visually-hidden">Chargement...</span>
+</div>`)
 
         this.input.addEventListener("focus", () => {
             if(this.dropdown.childElementCount > 0) {
@@ -33,12 +37,19 @@ class SearchInput {
     }
 
 
+    loading() {
+        this.label.append(this.loadingElement)
+    }
+
+
     async updateList(termSearch)
     {
+        this.loading()
         let response = await fetch(this.AUTOCOMPLETION_ENDPOINT + termSearch)
         let result = await response.json()
         result = result.slice(0, 4)
         this.dropdown.innerHTML = ""
+        this.loadingElement.remove()
 
         result.forEach(v => {
             this.dropdown.append(this.suggestionElement(v.label))
@@ -68,6 +79,10 @@ class SearchInput {
 
     getValue(){
         return this.input.value
+    }
+
+    setValue(value) {
+        this.input.value = value
     }
 
 
@@ -100,6 +115,7 @@ class FindRelation {
         this.fromInput = fromInput
         this.toInput = toInput
         this.resultCount = resultCount
+        this.$container = document.querySelector("#accordion")
 
         button.addEventListener("click", this.handleClick)
     }
@@ -110,6 +126,10 @@ class FindRelation {
     }
 
     handleClick = async (e) => {
+        this.$container.innerHTML = ""
+        this.$container.append(strToDom(`<div class="spinner-grow spinner-grow" role="status">
+  <span class="visually-hidden">Chargement...</span>
+</div>`))
         e.preventDefault()
         this.setParams()
         await this.search()
@@ -132,15 +152,15 @@ class FindRelation {
               </span>
             </h2>
           </div>`)
-
-            document.querySelector("#accordion").append(noResult)
+            this.$container.innerHTML = ""
+            this.$container.append(noResult)
             this.resultCount.textContent = "0"
             return
         }
 
         this.resultCount.textContent = json.connections.length.toString()
 
-        document.querySelector("#accordion").innerHTML = ""
+        this.$container.innerHTML = ""
         json.connections.forEach(v => {
             this.getConnection(v)
         })
@@ -186,7 +206,7 @@ class FindRelation {
 
         })
 
-        document.querySelector("#accordion").append(o)
+        this.$container.append(o)
 
     }
 
@@ -250,23 +270,18 @@ const $toInput = document.querySelector("#to")
 const $button = document.querySelector("#search")
 const $fromSuggest = document.querySelector("#from-suggest")
 const $toSuggest = document.querySelector("#to-suggest")
+const $reverseButton = document.querySelector("#reverse")
+
 let from = new SearchInput($fromInput, $fromSuggest)
 let to = new SearchInput($toInput, $toSuggest)
-/**
- * @param {HTMLButtonElement} button
- */
-function activeButton(button) {
-    button.removeAttribute("disabled")
-    button.classList.remove("btn-light")
-    button.classList.add("btn-primary")
-}
-/**
- * @param {HTMLButtonElement} button
- */
-function inactiveButton(button) {
-    button.setAttribute("disabled", "true")
-    button.classList.add("btn-light")
-}
+
+$reverseButton.addEventListener("click", e => {
+    e.preventDefault()
+    let [f, t] = [from.getValue(), to.getValue()]
+
+    from.setValue(t)
+    to.setValue(f)
+})
 
 let search = new FindRelation($button, from, to, $resultCount)
 
