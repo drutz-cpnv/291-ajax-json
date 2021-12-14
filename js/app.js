@@ -161,25 +161,28 @@ class FindRelation {
         this.resultCount.textContent = json.connections.length.toString()
 
         this.$container.innerHTML = ""
-        json.connections.forEach(v => {
-            this.getConnection(v)
+        json.connections.forEach((v, index) => {
+            this.getConnection(v, index)
         })
 
     }
 
-    getConnection(connection)
+    getConnection(connection, index)
     {
         let departure = new Date(connection.departure)
         let arrival = new Date(connection.arrival)
 
+        let headingId = `heading-${index}`
+        let containerId = `container-${index}`
+
         let o = strToDom(`<div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed d-flex align-items-center" type="button">
+            <h2 class="accordion-header" id="${headingId}">
+              <button class="accordion-button collapsed d-flex align-items-center" type="button" data-bs-target="#${containerId}" data-bs-toggle="collapse" aria-controls="${containerId}">
                 <span class="material-icons-round mx-2">train</span>
                 ${departure.toLocaleTimeString('fr-CH')} - ${arrival.toLocaleTimeString('fr-CH')}
               </button>
             </h2>
-            <div class="accordion-collapse collapse">
+            <div id="${containerId}" class="accordion-collapse collapse" data-bs-parent="#accordion" aria-labelledby="${headingId}">
               <div class="accordion-body">
                 
               </div>
@@ -187,23 +190,10 @@ class FindRelation {
           </div>`)
 
         let accBody = o.querySelector(".accordion-body")
-        connection.legs.forEach(leg => {
-            accBody.append(this.getStep(leg).nextSibling)
-        })
-
-        o.querySelector("button").addEventListener("click", (e) => {
-            if(e.target.parentNode.nextSibling.nextSibling.classList.contains("show")){
-                e.target.parentNode.nextSibling.nextSibling.classList.remove("show")
+        connection.legs.forEach((leg, index) => {
+            if(leg.type !== "walk" && index !== connection.legs.length-1) {
+                accBody.append(this.getStep(leg))
             }
-            else{
-                e.target.parentNode.nextSibling.nextSibling.classList.add("show")
-            }
-            Array.from(document.querySelectorAll(".accordion-collapse")).forEach(el => {
-                if(el !== e.target.parentNode.nextSibling.nextSibling) {
-                    el.classList.remove("show")
-                }
-            })
-
         })
 
         this.$container.append(o)
@@ -245,13 +235,13 @@ class FindRelation {
 
         return strToDom(`
 <div class="p-2 bg-light mb-2">
-    <div class="d-flex justify-content-between ${exit ? 'mb-2' : '' }">
+    <div class="d-flex justify-content-between ${exit ? 'mb-2' : ''}">
         <h6 class="mb-0"><span class="badge bg-primary text-light font-monospace">${departure.toLocaleTimeString()}</span> ${line} ${step.name}</h6>
         ${track}
     </div>
     ${exit ?? ''}
 </div>
-`)
+`).nextSibling
     }
 
     queryString() {

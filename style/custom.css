@@ -10746,5 +10746,8 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.accordion-collapse {
+  transition-duration: 0.2s;
+}
 
 /*# sourceMappingURL=custom.css.map */

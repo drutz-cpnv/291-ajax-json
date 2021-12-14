@@ -5,3 +5,8 @@ $font-family-base: 'Inter';
 $font-family-monospace: 'Roboto Mono';
 
 @import "bootstrap/bootstrap";
+
+
+.accordion-collapse{
+  transition-duration: .2s;
+}
