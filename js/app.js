@@ -182,7 +182,7 @@ class FindRelation {
             <h2 class="accordion-header" id="${headingId}">
               <button class="accordion-button collapsed d-flex align-items-center" type="button" data-bs-target="#${containerId}" data-bs-toggle="collapse" aria-controls="${containerId}">
                 <span class="material-icons-round mx-2">train</span>
-                ${departure.toLocaleTimeString('fr-CH')} - ${arrival.toLocaleTimeString('fr-CH')}
+                ${departure.toLocaleTimeString('fr-CH').substring(0, 5)} - ${arrival.toLocaleTimeString('fr-CH').substring(0, 5)}
               </button>
             </h2>
             <div id="${containerId}" class="accordion-collapse collapse" data-bs-parent="#accordion" aria-labelledby="${headingId}">
@@ -213,9 +213,6 @@ class FindRelation {
     getWalk(step, legs)
     {
         let lastStep = legs[legs.length -1]
-
-        console.log(step, lastStep)
-
         let out = strToDom(`
 <div>
     <div class="d-flex align-items-center px-2">
@@ -228,7 +225,6 @@ class FindRelation {
 </div>
 `).nextSibling
 
-        console.log(step.exit.stopid === lastStep.stopid)
         if(step.exit.stopid === lastStep.stopid){
             let exit = this.getStep(lastStep)
             out.appendChild(exit)
@@ -263,7 +259,7 @@ class FindRelation {
             let arrival = new Date(step.exit.arrival)
             exit = `
 <div class="d-flex justify-content-between">
-    <h6 class="mb-0"><span class="badge bg-primary text-light font-monospace">${arrival.toLocaleTimeString()}</span> ${step.exit.name}</h6>
+    <h6 class="mb-0"><span class="text-danger font-monospace me-2"><strong>${arrival.toLocaleTimeString().substring(0, 5)}</strong></span> ${step.exit.name}</h6>
     ${exitTrack}
 </div>
             `
@@ -272,7 +268,7 @@ class FindRelation {
         return strToDom(`
 <div class="p-2 bg-light mb-2">
     <div class="d-flex justify-content-between ${exit ? 'mb-2' : ''}">
-        <h6 class="mb-0"><span class="badge bg-primary text-light font-monospace">${departure.toLocaleTimeString()}</span> ${line} ${step.name}</h6>
+        <h6 class="mb-0"><span class="text-danger font-monospace me-2"><strong>${departure.toLocaleTimeString().substring(0, 5)}</strong></span> ${line} ${step.name}</h6>
         ${track}
     </div>
     ${exit ?? ''}
