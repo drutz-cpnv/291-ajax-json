@@ -9,10 +9,11 @@ class SearchInput {
     constructor(input, dropdown) {
         this.input = input
         this.dropdown = dropdown
-        this.label = this.input.parentNode.firstElementChild
+        this.label = this.input.parentNode.parentNode.firstElementChild
         this.loadingElement = strToDom(`<div class="spinner-border spinner-border-sm text-primary" role="status">
   <span class="visually-hidden">Chargement...</span>
 </div>`)
+        this.spinner = this.input.parentNode.querySelector(".spinner-border")
 
         this.input.addEventListener("focus", () => {
             if(this.dropdown.childElementCount > 0) {
@@ -36,7 +37,11 @@ class SearchInput {
 
 
     loading() {
-        this.label.append(this.loadingElement)
+        this.spinner.classList.remove("invisible")
+    }
+
+    loaded() {
+        this.spinner.classList.add("invisible")
     }
 
 
@@ -47,7 +52,7 @@ class SearchInput {
         let result = await response.json()
         result = result.slice(0, 4)
         this.dropdown.innerHTML = ""
-        this.loadingElement.remove()
+        this.loaded()
 
         result.forEach(v => {
             this.dropdown.append(this.suggestionElement(v.label))
