@@ -1,6 +1,4 @@
 class SearchInput {
-
-
     AUTOCOMPLETION_ENDPOINT = "https://timetable.search.ch/api/completion.fr.json?term="
 
     /**
@@ -193,6 +191,8 @@ class FindRelation {
         connection.legs.forEach((leg, index) => {
             if(leg.type !== "walk" && index !== connection.legs.length-1) {
                 accBody.append(this.getStep(leg))
+            } else if(leg.type === "walk") {
+                accBody.append(this.getWalk(leg, connection.legs))
             }
         })
 
@@ -200,6 +200,37 @@ class FindRelation {
 
     }
 
+    /**
+     * @param step
+     * @param {Array} legs
+     * @return {ChildNode}
+     */
+    getWalk(step, legs)
+    {
+        let lastStep = legs[legs.length -1]
+
+        console.log(step, lastStep)
+
+        let out = strToDom(`
+<div>
+    <div class="d-flex align-items-center px-2">
+        <span class="material-icons-round me-1" style="color: #5f6166; font-size: 1rem">
+            directions_walk
+        </span>
+        <span style="color: #5f6166; font-size: .7rem" class="me-3">${step.runningtime / 60}"</span>
+        <hr class="w-100" style="background-color: #5f6166">
+    </div>
+</div>
+`).nextSibling
+
+        console.log(step.exit.stopid === lastStep.stopid)
+        if(step.exit.stopid === lastStep.stopid){
+            let exit = this.getStep(lastStep)
+            out.appendChild(exit)
+        }
+
+        return out
+    }
 
     getStep(step)
     {
@@ -273,6 +304,6 @@ $reverseButton.addEventListener("click", e => {
     to.setValue(f)
 })
 
-let search = new FindRelation($button, from, to, $resultCount)
+new FindRelation($button, from, to, $resultCount)
 
 
