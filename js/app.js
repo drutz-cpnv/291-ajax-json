@@ -96,6 +96,7 @@ class SearchInput {
 class FindRelation {
 
     API_ENDPOINT = "https://timetable.search.ch/api/route.fr.json"
+    //API_ENDPOINT = "http://172.20.10.4:8000/api.php" // Fake API for offline testing
 
     TYPE_ICONS = {
         post: `<img src="../assets/pictos/bus.svg" alt="Type de transport: bus"/>`,
@@ -172,8 +173,8 @@ class FindRelation {
 
     getConnection(connection, index)
     {
-        let departure = new Date(connection.departure)
-        let arrival = new Date(connection.arrival)
+        let departure = new Date(connection.departure.replace(' ', 'T'))
+        let arrival = new Date(connection.arrival.replace(' ', 'T'))
 
         let headingId = `heading-${index}`
         let containerId = `container-${index}`
@@ -235,7 +236,7 @@ class FindRelation {
 
     getStep(step)
     {
-        let departure = new Date(step.departure ?? step.arrival)
+        let departure = new Date(step.departure?.replace(' ', 'T') ?? step.arrival?.replace(' ', 'T'))
 
         let track = ""
         let line = ""
@@ -256,7 +257,7 @@ class FindRelation {
                 exitTrack = `<span class="text-muted">Voie ${step.exit.track}</span>`
             }
 
-            let arrival = new Date(step.exit.arrival)
+            let arrival = new Date(step.exit.arrival.replace(' ', 'T'))
             exit = `
 <div class="d-flex justify-content-between">
     <h6 class="mb-0"><span class="text-danger font-monospace me-2"><strong>${arrival.toLocaleTimeString().substring(0, 5)}</strong></span> ${step.exit.name}</h6>
