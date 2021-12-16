@@ -1,4 +1,5 @@
 class SearchInput {
+
     AUTOCOMPLETION_ENDPOINT = "https://timetable.search.ch/api/completion.fr.json?term="
 
     /**
@@ -9,10 +10,6 @@ class SearchInput {
     constructor(input, dropdown) {
         this.input = input
         this.dropdown = dropdown
-        this.label = this.input.parentNode.parentNode.firstElementChild
-        this.loadingElement = strToDom(`<div class="spinner-border spinner-border-sm text-primary" role="status">
-  <span class="visually-hidden">Chargement...</span>
-</div>`)
         this.spinner = this.input.parentNode.querySelector(".spinner-border")
 
         this.input.addEventListener("focus", () => {
@@ -21,8 +18,8 @@ class SearchInput {
             }
         })
 
-        this.input.addEventListener("keydown",  async () => {
-            if(this.input.value.length > 1) {
+        this.input.addEventListener("keyup",  async () => {
+            if(this.input.value.length >= 2) {
                 await this.updateList(this.input.value)
                 this.dropdown.classList.add("show")
             }
@@ -71,13 +68,12 @@ class SearchInput {
 
         li.addEventListener("click", (e) => {
             e.preventDefault()
-            this.input.value = label
+            this.setValue(label)
         })
 
         return li
 
     }
-
 
 
     getValue(){
@@ -238,17 +234,13 @@ class FindRelation {
     {
         let departure = new Date(step.departure?.replace(' ', 'T') ?? step.arrival?.replace(' ', 'T'))
 
-        let track = ""
-        let line = ""
-        let exit = null;
+        let track = "",line = "", exit = null
 
         if(step.track){
             track = `<span class="text-muted">Voie ${step.track}</span>`
-
         }
         if(step.line){
             line = `<span class="badge text-light" style="background-color: #${step.bgcolor}">${step.line}</span>`
-
         }
 
         if(step.exit) {
