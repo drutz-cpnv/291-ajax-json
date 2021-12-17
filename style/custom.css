@@ -11,6 +11,18 @@
   left: 95% !important;
 }
 
+.stand-pictos {
+  display: flex;
+  flex-direction: row;
+  width: 100px;
+  gap: 3px;
+  justify-content: flex-end;
+}
+.stand-pictos img {
+  display: block;
+  height: 22px;
+}
+
 /*!
  * Bootstrap v5.0.2 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors

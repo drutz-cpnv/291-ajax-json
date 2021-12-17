@@ -230,6 +230,21 @@ class FindRelation {
         return out
     }
 
+
+    getTrackPicto(track) {
+        let reg = new RegExp(/^(?<stand>[A-Z]?)(?<voie>[0-9]{0,2})$/gm)
+        let values = reg.exec(track).groups
+
+        let out = ""
+        if(values.stand !== ""){
+            out += `<img src="/assets/pictos/quais/${values.stand}.svg">`
+        }
+        if(values.voie !== ""){
+            out += `<img src="/assets/pictos/voie/${values.voie}.svg">`
+        }
+        return out
+    }
+
     getStep(step)
     {
         let departure = new Date(step.departure?.replace(' ', 'T') ?? step.arrival?.replace(' ', 'T'))
@@ -237,7 +252,8 @@ class FindRelation {
         let track = "",line = "", exit = null
 
         if(step.track){
-            track = `<span class="text-muted">Voie ${step.track}</span>`
+            //track = `<span class="text-muted">Voie ${step.track}</span>`
+            track = `<div class="stand-pictos">${this.getTrackPicto(step.track)}</div>`
         }
         if(step.line){
             line = `<span class="badge text-light" style="background-color: #${step.bgcolor}">${step.line}</span>`
@@ -246,7 +262,8 @@ class FindRelation {
         if(step.exit) {
             let exitTrack = ""
             if(step.exit.track){
-                exitTrack = `<span class="text-muted">Voie ${step.exit.track}</span>`
+                //exitTrack = `<span class="text-muted">Voie ${step.exit.track}</span>`
+                exitTrack = `<div class="stand-pictos">${this.getTrackPicto(step.exit.track)}</div>`
             }
 
             let arrival = new Date(step.exit.arrival.replace(' ', 'T'))

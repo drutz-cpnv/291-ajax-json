@@ -23,6 +23,18 @@ $grid-breakpoints: (
   left: 95% !important;
 }
 
+.stand-pictos{
+  display: flex;
+  flex-direction: row;
+  width: 100px;
+  gap: 3px;
+  justify-content: flex-end;
+  img{
+    display: block;
+    height: 22px;
+  }
+}
+
 @import "bootstrap/bootstrap";
 
 
