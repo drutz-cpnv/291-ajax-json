@@ -237,10 +237,10 @@ class FindRelation {
 
         let out = ""
         if(values.stand !== ""){
-            out += `<img src="/assets/pictos/quais/${values.stand}.svg">`
+            out += `<img src="assets/pictos/quais/${values.stand}.svg">`
         }
         if(values.voie !== ""){
-            out += `<img src="/assets/pictos/voie/${values.voie}.svg">`
+            out += `<img src="assets/pictos/voie/${values.voie}.svg">`
         }
         return out
     }
