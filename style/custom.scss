@@ -2,6 +2,7 @@ $red: #EB0000;
 $primary: $red;
 
 $font-family-base: 'Inter';
+$border-radius: 0;
 $font-family-monospace: 'Roboto Mono';
 
 $grid-breakpoints: (
@@ -12,6 +13,7 @@ $grid-breakpoints: (
         xl: 1200px,
         xxl: 1400px
 );
+
 
 .start-80 {
   left: 80% !important;
